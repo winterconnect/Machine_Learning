@@ -302,7 +302,9 @@ data science의 본질은 데이터의 특징을 확인하는 것이다
 | tuple      |           |
 | dictionary |           |
 
+정형(structured): string, list, tuple
 
+비정형(unstructured): dictionary
 
 왜 리스트, string, tuple을 한줄로 저장할까?
 
