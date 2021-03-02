@@ -1245,6 +1245,8 @@ cross validation
 > model: y=wx + b 일 때, y가 연속형 데이터
 >
 > 일반적으로 x도 연속형 데이터이다(아닌 경우도 있다)
+>
+> 분할하기 전 scaling, encoding을 해서 성능을 좋게 만들어준다
 
 
 
@@ -1429,7 +1431,7 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 #### 단일회귀분석: Ouput(y)에 영향을 주는 input(x)이 1개인 경우
 
 - (문제) 습도가 53일 때 불량품 수량 예측
-- formula = 불량품수량 ~ 습도
+- formula = 불량품수량 ~ 습도 (y ~ x)
 - 현실적으로 input이 하나인 경우는 많지 않다
 
 
@@ -1437,7 +1439,7 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 #### 다중회귀분석: Input(x)이 여러 개인 경우(y가 하나, x가 여러개)
 
 - (문제) 제품의 강도는 생산과정의 온도와 시간에 영향을 받음
-- formula = 강도 ~ 온도 + 시간 ( y = w1x1 + w2x2 + b)
+- formula = 강도 ~ 온도 + 시간 ( y = w1x1 + w2x2 + b) (y ~ x1 + x2)
 - 현실세계에서 일반적으로 보는 문제
 
 
@@ -1473,6 +1475,13 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 
 
 
+- (문제) 의료비 지출 예측 모델링
+- formula - expenses ~ age + bmi + smoker
+
+
+
+
+
 ### Encoding
 
 > 숫자를 문자로, 문자를 숫자로
@@ -1497,6 +1506,12 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 - 하나의 값만 True(1)이고 나머지 값은 False(0)인 인코딩
 
 - hot: True를 의미. 하나만 hot하게 한다
+
+
+
+일반적으로 분류모델이 예측모델보다 더 어렵고,
+
+실제로 분류 문제는 딥러닝을 사용하는 경우가 더 많다
 
 
 
