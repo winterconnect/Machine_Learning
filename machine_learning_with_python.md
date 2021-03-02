@@ -1422,6 +1422,8 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 
 
 
+### 단일회귀분석과 다중회귀분석
+
 
 
 #### 단일회귀분석: Ouput(y)에 영향을 주는 input(x)이 1개인 경우
