@@ -70,13 +70,14 @@
 >
 >
 >2. Machine Learning(Gradient Descent): 학습 원리
->   - 학습을 시키는 "머신"이 무엇인가?
->   - **Gradient Descent**: 경사하강법
+>  - 학습을 시키는 "머신"이 무엇인가?
+>  - **Gradient Descent**: 경사하강법
 >
 >
 >
 >3. Model Validation
->   - 모델 검증이 무엇인가 
+>  - 모델 검증: 모델이 실제로 사용하기에 적합한지 평가
+>  - 잘 될것인지를 확인하여 "잘 될건지"(미래) 파악하는 것
 >
 >
 >
@@ -296,8 +297,8 @@
 
 - Alan Turing, 1950
 - 컴퓨터가 지능을 가지고 있는지 여부를 조사
+- 우리가 기대하는 만큼의 성능을 내는지 평가하는 것으로 의미가 변해가고 있다
 - 질문자가 **인간과 컴퓨터에게 같은 질문**을 하여 **인간의 답**과 **컴퓨터의 답**을 **구분할 수 없으면** 컴퓨터가 지능을 갖고 있는 것으로 볼 수 있음 
-
 - CAPTCHA(Completely Automated Public Turing test to tell Computers and Humans Apart): 사람인지 기계인지를 구분하는 장치
 
 
@@ -412,13 +413,13 @@
 
   - 정량적 예) 2개 틀림, 30보다 작음
 
-  3) 새로운 경험: parameter update
+  3) 새로운 경험: parameter update (gradient descent에 의해)
 
   4) 향상: 측정한 성능에 긍정적인 영향을 줌 (틀린 것이 줄고 맞은 것이 늘었다)
 
 
 
-- 학습 이후 새로운 데이터에 대하여 학습된 내용으로 처리하는 것
+- 학습 이후 새로운 데이터(test data)에 대하여 학습된 내용(train data)으로 처리하는 것
 
 
 
@@ -464,8 +465,6 @@
 - 변경의 대상: a와 b
 - 제공된 데이터: x와 y
 - 파라미터의 업데이트
-
-1. - 
 
 
 
@@ -515,7 +514,7 @@
 
 Machine Learning
 
-​	Supervised Learning
+​	**Supervised** Learning (교재 chapter 2)
 
 ​		: Develop predictive model based on both input(=x) and output(=y, label) data
 
@@ -523,7 +522,11 @@ Machine Learning
 
 ​		Classification
 
-​	Unsupervised Learning: Group and interpret data based on only input data(=x)
+​			이진분류(2개)
+
+​			다중분류(3개 이상)
+
+​	**Unsupervised** Learning: Group and interpret data based on only input data(=x)
 
 ​		Clustering(군집, 연관)
 
@@ -535,7 +538,7 @@ Machine Learning
 
 
 
-- 데이터에 존재하는 특징(Feature)을 바탕으로 처리 (수치예측, 범주예측)
+- 데이터에 존재하는 **특징(Feature)**을 바탕으로 처리 (수치예측, 범주예측)
   - feature: 통계학의 변수(Variable)
 - input(x)에 대한 output(y)을 제공: data(labeling)가 제공되어야 학습할 수 있다
 - input(x) Data와 output(y) Data(label)의 **관계**를 학습
@@ -654,7 +657,7 @@ Machine Learning
   - MSE를 w에 대해 편미분(dw)
     - 1단계: 바깥을 미분   2(y - wx - b) 
     - 2단계: 안쪽 미분  (y - y_hat) * 2 * -x
-  - MSE를 ddp 대해 편미분(db)
+  - MSE를 d에 대해 편미분(db)
     - 2 * (y -wx - b)
     - 2 * (y - wx - b) * (-1)
     - (y - y_hat) * 2 * (-1)
@@ -706,6 +709,22 @@ Machine Learning
 
 
 
+
+
+#### Global Minimum vs. Local Minimum
+
+- convex nonconvex
+
+- 학습의 목적은 global minimum 을 찾아내는 것
+- GD는 local minimum 에 빠진다는 문제점이 있다
+- 해결하는 방법
+  - 여러군데에서 해본다 등등... (딥러닝에서 배울 것 - optiminzation method)
+- convex 가 아니라 nonconvex 에서 보통 문제가 나타나는 것을 보게 될 것
+
+
+
+
+
 ---
 
 #### Gradient Descent 정리
@@ -747,25 +766,477 @@ ___
 ### 총정리
 
 - 우리는 인공지능을 만들고 싶다
-
 - 그것을 위해 machine이라는 '함수'를 학습시키는데
-
 - x, y는 데이터로 주어져야 하고, w,b를 데이터에 최적화하여 학습시키는 것이다
-
 - 데이터를 지속적으로 제공해준다면
-
-- 학습시켜서 새로운 형태의 처리방법(모델)을 찾아내게 될 것이고
-
-- 학습을 시키기 위해 정답(y)과 기준(작업에 따라 달라짐)이 필요하다. 
-  - 수치예측에서는 그 기준이 MSE
-
-- 오차가 줄어드는 방향으로 자동으로 업데이트하기 위해 gradient descent를 사용한다.
+- 데이터의 특징을 확인하게 될 것이고, (Data Analytics)
+- 특징: 모여있는 모양, 떨어져있는 모양 두가지 (통계의 "분포")
+- 학습을 통해 새로운 형태의 처리방법(모델)을 찾아내게 될 것이고
+- 학습을 시키기 위해 중요한 것은 정답(y)과 기준(작업에 따라 달라짐)이다. 
+  - 수치예측(Regression)에서는 그 기준이 MSE
+- 오차가 줄어드는 방향으로 자동으로 업데이트하기 위해 Gradient Descent를 사용한다.
   - 원래 있던 값에서 편미분 값을 학습률을 곱해서 빼주는 것
-
 - 이것을 반복하면 최적의 함수를 찾아낼 수 있게 되고, 최적의 함수를 가지고
-
 - 미래 어떤 결과가 나올지 예측할 수 있다
+
+
+
+- 사람이 하던 일을 기계(함수)를 이용해 자동으로 하고싶다
 
 ___
 
+
+
+파라미터의 초기값은 0~1 사이로 보통 랜덤하게 세팅된다
+
+
+
+학습을 많이 시킬수록 오차는 점점 줄어들 것
+
+하지만 그것이 정말 좋은 모델일까?
+
+
+
+
+
+## 3. 모델 검증(Model Validation)
+
+
+
+- 함수를 학습시켜 모델로 만들면,
+- 모델로 예측작업이 가능해진다
+- 모델이 예측을 한다면, 그 결과를 믿을 수 있어야 한다
+
+- Validation이란? 사용에 적합한가 확인하는 과정
+
+
+
+
+
+### Enough vs. Not enough
+
+
+
+1차방정식으로 만든 함수는
+
+우리가 만든 모델이 데이터를 설명하기에 충분하지 않다
+
+
+
+### First-Order(1차함수) Model vs. High-Order(다항함수) Model
+
+(교재 chapter4. p.293)
+
+2차함수: y2 = w1x**2 + w2x + b
+
+5차함수: y5 = w1x^5 + w2x^4 + w3x^3 + w4x^2 + w5x + b
+
+
+
+파라미터의 수가 늘어나게 됨
+
+모델의 데이터에 대한 설명능력: Model Capacity
+
+Model Capacity에 직접적으로 영향을 주는 것 중 하나가 파라미터의 개수
+
+
+
+
+
+모델을 사용해서 데이터의 분포를 설명/표현하려고 함
+
+모델의 w,b가 데이터를 설명하는 것
+
+설명할 수 있는 애들(w,b)이 많아지면 설명할 수 있는 것도도 늘어나게 됨
+
+일반적으로 파라미터 개수가 늘어나면 capacity가 좋아진다
+
+
+
+### Model Capacity
+
+>  Capacity: 모델의 데이터에 대한 설명력
+
+
+
+#### 1) Parameter의 개수
+
+
+
+#### Data 산점도
+
+전기 사용량과 바닥면적의 상관관계
+
+
+
+- 1차원 모델을 만들면?
+- 2차원 모델을 만들면?
+- 9차원 모델을 만들면?
+
+
+
+모델링을 할 때, 한가지를 만드는 게 아니라
+
+여러 모델을 만들어서 모델 별로 오차가 작은지를 비교해봐야 한다
+
+모델 중 가장 적합한 모델을 찾아야 한다
+
+한번에 좋은 모델이 나오는 게 아니라, 다양한 시도를 통해 가장 좋은 모델을 찾아낸다
+
+
+
+정확히 MSE를 계산해서 좋은 모델을 판단해야 한다
+
+
+
+
+
+딥러닝으로 갈수록 파라미터의 개수가 늘어나게 되고, 
+
+특히 자연어처리 모델들(1천 8백억개...)
+
+복잡한 
+
+
+
+
+
+### Training Error
+
+
+
+Machine Learning에서 Learning이란?
+
+경사하강법을 사용해서 모델의 파라미터를 최적화시키는 것
+
+
+
+이것이 정말 Learning인가, Training에 가깝게 느껴지지 않는가?
+
+MSE 을 Training error 라고 하기도 한다
+
+
+
+- 기본적으로 학습은 training error를 최소화하는 방향으로 진행
+- Training Error
+  - Training data에 model을 적용하여 확인한 실제값과 예측값의 차이(오차)
+  - mean((y - y_hat)**2)
+- 문제점) 여러 개의 Model을 생성 후 각각의 Training Error 를 비교
+  - 실무 데이터에 적용하기 위한 최적의 Model을 선택
+  - Model생성(model.fit(x, y))과 평가(model.predict(x))에 **같은 데이터를 사용**하여 **부작용** 발생
+
+
+
+- 오차(training error)를 계산하기 위해서는
+
+- sklearn이 필요
+
+
+
+
+
+1차 모델은 계산이 간단(colab 참조)
+
+5차 모델:  y5 = w1x^5 + w2x^4 + w3x^3 + w4x^2 + w5x + b
+
+x, y 는 있지만 x^2 ~ x^5는 없음. 만들어줘야 함
+
+다차원속성을 만들어줘야 한다
+
+- sklearn 의 PolynomialFeatures 를 통해 만들 수 있다
+
+
+
+
+
+MSE는 0이 될 수 없다
+
+왜? 데이터에 오차가 0이 될 수 있는가?
+
+예) 데이터가 5000개... 이론상 5천차함수를 만들면 오차가 0은될 수 있을 것이다
+
+그러나 그것이 의미는 있으며, 현실적으로 훨씬 많은 데이터를 다루는데 과연 0으로 만드는 것이 가능한가?
+
+따라서 MSE(오차, 잔차)가 0이되는 것은 사실상 없다
+
+
+
+
+
+ 
+
+9 차모델을 쓰는 게 타당할까?
+
+타당하지 않다. 왜?
+
+
+
+
+
+Data Analytics
+
+과거의 특징을 보는 것
+
+
+
+우리가 하는 머신러닝도 과거의 데이터를 사용하여 학습
+
+우리가 만든 머신러닝의 모델은 과거 행동의 특징을 파라미터를 통해 학습하는 것
+
+
+
+
+
+데이터 분석의 목적
+
+1. 과거 행동의 특징을 확인 - EDA
+2. 과거 행동의 특징을 학습해서 미래 행동에 영향을 줌, 미래 행동의 결과를 예측(predictive model)
+
+
+
+우리의 모델은 과거 행동에 최적화되어 있을 뿐, 미래 행동도 예측할 수 있을까?
+
+
+
+Training Error의 문제점
+
+Model생성(model.fit(x, y))과 평가(model.predict(x))에 같은 데이터를 사용하여 부작용 발생
+
+
+
+과거 데이터에 최적화되어 있어서, 미래에도 그 정도의 MSE가 나올 수 있는가?
+
+
+
+이러한 부작용을 "과적합(Overfitting)" 이라고 한다
+
+- 과거데이터에"만" 엄청나게 잘맞다는 뜻.
+- 미래 데이터에 잘 맞느냐? 모르겠다.
+
+
+
+
+
+### Overfitting
+
+- 학습한 결과(model)가 **Training Data에만 최적화된 모델**을 생성
+  - 학습에 사용되지 않은(미래 발생) 데이터에서 성능이 급격하게 낮아짐(오차가 급격하게 올라감)
+- 부적합(Under Fit) vs. 최적합(Ideal Fit) vs. 과적합(Over Fit)
+
+
+
+- 사용하기에 적합하지 않다(not validated)
+
+
+
+
+
+- training error만 보는 것은 타당하지 않다
+- 왜? 학습한 결과로 평가를 하기 때문에 신뢰성이 없다
+- 따라서 dataset을 두개로 쪼개어 하나로 모델을 만들어서, 모델을 만들 때 쓰지 않은 데이터로 testing error를 본다
+- testing error 가 낮은 것이 미래 행동도 잘 예측할 것이라고 보는 것이 타당하다
+
+
+
+
+
+### Testing Error
+
+- 과거 데이터를 두개로 쪼개서 하나는 training(fit), 하나는 testing(predict)에 사용
+- 모델을 **학습(모델생성)** 후 반드시 **평가(모델평가)**가 필요
+- Testing Error를 활용하여 **판단의 객관성** 측면에서 학습(생성)된 모델을 비교
+  - Training Data: 학습(모델생성)을 위해 제공되는 데이터
+  - Testing Data: 학습결과를 평가(모델평가)하기 위한 데이터
+- 데이터의 크기에 따라서 일반적으로 8:2 또는 7:3 등의 비율로 구성
+
+(Chapter2 p.73 선형모델, p.76)
+
+
+
+- sklearn.model_selection train_test_split 사용
+
+- train data 와 test data가 오차가 둘다 줄어들어야 함
+
+
+
+- 하나의 덩어리인 데이터를 두개로 쪼개자
+
+- 어떤 비율로 쪼개야 제일 좋을까? 해봐야 안다.
+- 쪼개는 비율도 "하이퍼 파라미터"
+
+
+
+- 데이터프레임 그대로 쪼개면?
+- 9개 컬럼이 그대로 옴 (614, 9) (154, 9)
+- 실제로는 두개만 씀
+
+
+
+- X, y가 구조상으로는 시리즈이지만 array로 쪼갬
+- X_train, X_test (614, 1) (154, 1)
+- y_train, y_test (614, 1) (154, 1)
+
+
+
+- training error vs. testing error
+
+  평가는 testing error를 기준으로 model selection 한다
+
+
+
+### Training Data vs. Testing Data
+
+#### 과정
+
+1. Data split (train : test)
+
+   1) Training Data
+
+   ​	-> Machine Learning Algorithm(예. Regression): Model_1.fit(X, y)
+
+   ​	-> Models: 여러 모델을 만듦(1차, 5차, 9차 등)
+
+   2) Testing Data
+
+   ​	-> Models: .predict(X_test) --> y_hat --> Metric(예. MSE)
+
+   ​	-> Model Select
+
+
+
+training data로 모델을 만들어 testing data로 예측값을 생성하고 모델의 성능을 평가
+
+최적의 모델을 선택
+
+
+
+- Model을 select 하는 과정에서 test data를 봐버리면,
+
+
+
+
+
+
+
+#### Machine Learning / Deep Learning modeling의 궁극의 목적
+
+- 일반화된 모델을 만드는(학습시키는) 것
+
+- 일반화란? 모델 생성(학습) 시 사용되지 않은 데이터에서도 유사한 성능을 제공
+
+  (Training Error, Test Error(=MSE)의 갭의 크면 안된다)
+
+- overfitting되지 않은 model을 만드는 것이 우리의 목적
+
+
+
+- 이 모델을 사용해서 실제로 만나게 될 오차가 MSE와 가까울까?
+- training error보다는 test error가 실제보다 더 가까울 것
+- 그러나 사실 model selection에도 학습은 일어난다
+- model select 까지 학습과정으로 본다면, 사실 test data도 학습에 쓰이는 것
+
+
+
+여러개 모델 중 하나를 고르는 것도 학습이다
+
+
+
+### Validation Approach
+
+> 생각해보면 좋을 문제
+>
+> validation approach는 왜 할까? 고민해보자
+>
+> - generalization error를 추정하기 위해 사용
+> - 미래에 만날 에러에 좀 더 가까운 에러를 추정해보기 위해서
+
+
+
+- Testing Error
+  - Testing Data에 **최적 Model**을 적용해 얻은 실제값과 예측값의 차이(오차)
+  - Testing Error를 사용하여 실무 데이터에 대한 **Generalization Error**를 **추정**
+- Testing Data역시 모델평가 과정에서 사용되어지는 문제점 발생
+  - Training Data를 Training Data와 Validation Data로 분리하여 모델을 평가
+
+
+
+
+
+따라서 데이터셋을 3개로 쪼갠다
+
+Training Data: Model.fit
+
+Validation Data: Model.predict, Model-select -- 모델을 1개 고름 // 학습은 여기서 끝남
+
+
+
+최종적으로 select된 모델을 가지고, generalized error를 추정
+
+Testing Data: 미래의 오차가 어느정도 되는지 추정하기 위해서 사용
+
+
+
+- 사실상 train, test로 model select 해도 크게 상관은 없다
+
+  (실무에서는 validation을 하게 될것)
+
+
+
+- 문제: sklearn에는 train_test_split 밖에 없다
+  - 방법: train_test_split을 두번한다
+  - 데이터를 두개로 쪼갠 후(Test 생성), 하나를 한번 더 쪼갠다(Train, Validation)
+
+
+
+
+
+### Generalization Error 일반화된 모델
+
+- 학습에 사용되지 않은 데이터에서도 유사한 오차가 나오기를 바람
+
+
+
+
+
+교차검증
+
+cross validation
+
+
+
+미래에 발생할 오차를 최소화하기 위해 최선을 다할 뿐
+
+
+
+
+
+---
+
+### 오늘내용 정리
+
+- 모델은 하나만 만들지 않는다
+- 여러개를 만들어서 사용하기 적합만 모델을 select한다
+- 예측모델에 대해서만 보았고, 실제 분류모델을 검증하는 방법을 달라지게 될 것이다
+
+- model capacity가 달라지는 여러가지 이유가 있다
+  - 다항함수로 order를 올리는 것: parameter개수가 많아지면 capacity가 올라간다
+- 시각화 뿐만 아니라 error수치를 보아야 하는데, error수치는
+- training error - 객관적으로 신뢰할 수 없기 때문에
+- test error 가 좀 더 객관적이고 타당할 것이라고 본다
+- 여러 모델의 mse를 비교해서 가장 mse가 낮은 모델을 선택하는 것이 타당하다
+- 그러나 전체 과정에서 model select 도 학습과정에 포함된다고 보기 때문에
+- 데이터셋을 3개로 나누어 (train, validation, test)
+- train 으로 모델링, validation으로 model select (학습은 여기서 끝난다)
+- test로 generalization error를 추측
+- test 데이터는 keep해뒀다가 최종 모델로 미래 오차를 예측하는 데 쓰인다
+
+---
+
+
+
+
+
+
+
+## 4. Regression Analysis
 
