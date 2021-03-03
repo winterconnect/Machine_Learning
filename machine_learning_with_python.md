@@ -1,4 +1,4 @@
-# Machine Learning
+Machine Learning
 
 > 지도학습과 비지도학습을 구분하고, 지도학습은 분류와 회귀로 나뉜다
 >
@@ -1525,4 +1525,508 @@ Normalization, Standardization 해도 데이터의 모양은 변하지 않는다
 실제로 분류 문제는 딥러닝을 사용하는 경우가 더 많다
 
 
+
+
+
+## 5. Logistic Regression (p.86)
+
+>classification(분류)은 두가지로 나눠진다
+>
+>- 이진분류(Binary Classification)
+>
+> - ex) 구매고객이 남자냐, 여자냐 / 정상이냐, 불량이냐/ 음성이냐, 양성이냐
+>
+>- 다중분류(Categorical Classification)
+>
+> - 다중분류에 대한 깊은 이야기는 딥러닝에서 다룬다
+>
+>
+>
+>분류의 세 파트
+>
+>1. Sigmoid
+>2. Cross Entropy Error
+>3. Confusion Matrix
+
+
+
+### Logistic Regression
+
+
+
+#### Regression: 선형모델을 의미
+
+- Regression의 프로토타입: y = wx + b
+- 우리가 하는 분류에 맞지 않음
+
+
+
+#### Logistic이란?
+
+- 분류 중에서도 이진분류
+
+- "logit"이라는 확률론의 개념에서 용어가 나와서 Logistic이라고 부름
+
+
+
+- 컴퓨터의 입장에서는 남자든 여자든, 정상이든 분량이든 모두 1, 0
+- 두개가 서로 다르다는 것. (y가 연속형이 아니라 명목형)
+
+
+
+- y_hat = wx + b 에서 y_hat의 범위는?
+  - x값의 범위 따라 양의 무한대에서 음의 무한대까지
+- 그러나 이진분류 문제에서는  y_hat이 가질 수 있는 값이 0 or 1
+
+
+
+- 0~1 사이에 값이 나올 수 있는 것은? 확률(Probability)
+- Logistic = Probability(확률)
+- y_hat을 확률 범위로 바꿔줄 방법이 필요하다 -  sigmoid
+- sigmoid 연산을 취하면, y_hat = sigmoid(wx+b)
+  - x값이 아무리 커져도 y는 1보다 클 수 없고, x값이 아무리 작아져도  y는 0보다 작을 수 없게 된다
+- Logistic과 sigmoid는 같은 단어라고 생각해도 무방
+- Sigmoid(wx + b) => 0~1 (Probability)
+
+
+
+### 1) sigmoid()
+
+> 필터 함수, activation(활성화) 함수 등으로 불린다
+
+- sigmoid() 함수를 필터로 사용
+
+- sigmoid(x) = 1 / 1 + e**-x
+
+  - x값의 변화에 따라 y값이 바뀌게 되는 함수
+  - e: 오일러상수 (약 2.71)
+
+- sigmoid(0) = 1 / 1 +1 = 1/2 = 0.5
+
+  - x가 0인 지점에 0.5를 지나게 됨
+
+- sigmoid(1000000)
+
+  ​	= 1 / 1 + e**-1000000 (e\*\*-100000은 매우 작은 수, 0에 수렴)
+
+  ​	= 1 / 1 = 1
+
+- sigmoid(-1000000)
+
+  ​	= 1 / 1 + e**1000000 (e\*\*1000000은 매우 큰수, 무한대)
+
+  ​	= 1 / 무한대 = 0에 수렴
+
+- 따라서 sigmoid를 쓰면 y값이 **0과 1 사이**에 나오도록 변형이 된다
+
+​	
+
+---
+
+#### 정리
+
+Logistic Regression이란?
+
+원래 있던 regression에 sigmoid를 씌운 것
+
+Logistic과 Sigmoid는 같은 의미로 쓰인다
+
+---
+
+
+
+- sigmoid의 문제점
+
+  - 실제 우리에게 필요한 것은 0 or 1, 그러나 sigmoid는 0~1 사이의 값이 나온다
+
+    - 남자면 남자, 여자면 여자!
+
+    예) Linear Regression: 온도 17도일 때 아아는 몇잔 팔릴까?
+
+    ​	  Logistic Regression: 0 아니면 1
+
+
+
+- Classification(범주예측) 모델
+  - Output(y)의 수치예측이 아닌 어떤 범주에 속하는지에 대한 예측(확률)을 모델링
+- Regression(수치예측) 모델에 Sigmoid(필터) (Activation Function)를 적용하여 구현
+  - 일반적으로 분류 기준을 **0.5로 지정**(변경 가능)
+  - 0.5 보다 크면 1, 0.5 보다 작으면 0으로 분류
+- 분류 결과에 대한 추가적인 신뢰도 검증이 필요(Model Validation)
+  - 혼돈 행렬(Confusion Matrix)
+  - 정확도(Accuracy), 정밀도(Precision), 재현율(Recall)
+
+
+
+- 이 모델 함수를 사용해서 학습을 한다는 것은?
+
+  - 분포된 데이터를 학습하기 위해서 w, b를 바꾸면 모델이 주어진 데이터에 최적화됨
+  - sigmoid도 w, b를 조정하면 모델이 데이터에 최적화되어야 할것 (그래프의 모양이 바뀌어야 할 것)
+  - **s(wx+b) 함수에 w는 기울기, b는 좌우이동**
+    - b는 y축과 만나는 지점. sigmoid 함수의 그래프가 좌우로 움직이면 y축과 만나는 지점이 위아래로 이동함을 볼 수 있음
+    - w는 기울기: 최대 모양은 step함수의 모양(S자가 될 수는 없다)
+    - sigmoid 함수 안쪽에 있는 w와 b를 학습시켜 모델을 데이터에 튜닝
+- 오차가 줄어드는 방향으로 update 하는 방식은 똑같이 "Gradient Descent", 다른 식의 오차함수(Cross Entropy Error)를 사용하게 됨
+  
+
+  
+
+
+
+### 2) Cross Entropy Error(CEE)
+
+> 딥러닝에서는 중요한 개념
+>
+> 
+>
+> **Machine Learning Modeling**
+>
+> 1. Regression
+>
+>    - Learning(Training) -> (Train Data의) MSE 
+>
+>      - mean(y-y_hat)**2: 실제값과 예측값의 차이
+>
+>    - Validation -> (Test Data의) MSE
+>
+>      (학습과 검증에 모두  MSE를 씀)
+>
+> 2. Classification
+>
+>    1) 이진분류(Binary Classification)
+>
+>    - Learning -> 과연 무엇을 보며 에러를 낮출 것인가? 
+>
+>      - MSE가 가능은 하지만 효율적이지 않다. 
+>
+>      - **Cross Entropy Error(CEE)**를 사용
+>
+>    - Validation -> Accuracy, Precision, Recall, F1 Score
+>
+>    2) 다중분류(Categorical Classification)
+
+
+
+#### Entropy
+
+- Entropy란? "불순도" 라고 생각하자
+
+- "불순도"가 작으면 좋은 것
+
+  예) 파란색 점 무리, 빨간색 점 무리가 있음
+
+  ​	  파란색은 파란색끼리만, 빨간색은 빨간색끼리만 있다면? 불순도가 없다
+
+  ​	  파란색과 빨간색이 섞여있다면? 불순도가 생겼다
+
+- 불순도가 낮아지는 쪽으로 모델을 학습시키겠다(w,b값을 바꾸겠다)
+
+- 어떻게 측정할 것이냐의 문제
+
+
+
+- Entropy 를 이해하기 위해서는 정보 이론을 알야아 한다
+
+
+
+#### Information Theory(정보이론)
+
+- **Information Gain(정보이득량)**
+
+  - 1) 자주 발생하지 않는 사건은 2) 자주 발생하는 사건보다 전달하는 **정보량**이 많음
+
+    - 1) 발생확률이 낮은 사건, 2) 발생확률이 높은 사건
+
+    - Information Gain은 정보의 희귀성(발생가능성)에 반비례
+
+    - 언제 발생할지 모르므로, 자주 발생하지 않는 사건이 더 많은 정보를 준다
+
+      예) 신용카드의 상환과 연체
+
+    - I(x) = -log(P(x))
+
+      - I: Information
+      - P(x): probability x (사건의 발생 확률)
+      - 1/P(x) 에 log를 씌워 -log(P(x))가 됨
+
+- Degree of Surprise(놀람의 정도)
+
+  - 예상하기 어려운 정보에 더 높은 가치를 매기는 것
+
+
+
+- 이것을 entropy로 변환시키면,
+
+
+
+#### Entropy(불순도 Metric척도)
+
+- 정의: 불순도의 정도
+- Entropy = E(-log(P(x)))
+  - E: Expected Value(기댓값), 기댓값이란? 확률의 평균
+  - -log(P(x)): 정보량
+- 확률변수의 평균 정보량(기댓값)
+  - -sum(P(x) * log(P(x)))
+    - P(x)와 log(P(x))는 같은 P(x)로 계산
+  - 놀람의 평균 정도
+
+- 불순도가 낮으면 분류정확도가 높아짐
+
+
+
+#### Cross Entropy Error
+
+- 왜 cross entropy라고 하는가?
+
+  - entropy를 계산식을 보면 **-sum(P(x) * log(P(x)))**: P(x)가 같다
+
+  - cross entropy error의 식을 보면, **-y * log(y_hat) - (1-y)*log(1-y_hat)**
+
+  - P(x)를 같은 값을 쓰지 않고, 앞에 있는 확률값과 뒤에 있는 확률값을 교차해서 계산하므로 "cross" entropy
+
+    (y와 y_hat의 차이점을 보려고 하는 것이라서)
+
+- 서로 다른 사건의 확률을 곱하여 Entropy를 계산
+- y를 Cross-Entropy의 가중치로 적용
+
+
+
+#### Binary Cross Entropy Error
+
+- -y * log(y_hat) - (1-y)*log(1-y_hat)
+
+- 왜 이렇게 생겼는가?
+
+  - 이진분류에서  y가 가질 수 있는 값은 0, 1밖에 없다
+
+  - y = 0 일 때
+
+    -(1-y)*log(1-y_hat)
+
+    = **-log(1-y_hat)**
+
+  - y = 1일 때
+
+    -y*log(y_hat)
+
+    = **-log(y_hat)**
+
+  
+
+- y = 1일 때: CEE = -log(y_hat)
+
+  - y_hat은 0~1사이 값밖에 나오지 않음
+  - y가 1일 때 y_hat을 1이라고 했다면 CEE(오차)는 0
+  - y가 1일 때 y_hat을 0이라고 했다면 CEE(오차)는 무한대로 커진다
+
+
+- y가 0일 때: CEE = -log(1 - y_hat)
+
+  - y_hat에도 -가 붙어있으므로 -log 그래프가 좌우대칭된다
+  - y가 0일 때 y_hat을 0이라고 하면 CEE는 0
+  - y가 0일 때 y_hat을 1이라고 하면 CEE는 무한대로 커진다
+
+  
+
+- y값에 가까워질수록 값이 줄어들도록 만든 것이 CEE
+
+
+
+- CEE를 쓰면 y=0, y=1 를 구분해서 오차가 얼마나 발생했는지를 정량적으로 측정할 수 있다
+- 분류 문제에서는 MSE 보다  CEE를 쓰는 것이 학습효과가 좋고 학습효과도 빨라진다
+- 경사하강법을 쓸 때 log함수를 미분해야 한다
+- CEE = -log(1 - y_hat) = -log(1 - sigmoid(wx+b))
+
+
+
+
+
+- 오차(CEE)를 가지고 성능을 평가할 수 없다
+
+
+
+
+
+### 3) Confusion Matrix (p.356)
+
+> - 분류모델의 Validation
+> - 이진 분류 문제에서 y는 0 또는 1
+> - y_hat 값은 0 ~ 1 사이 값. 따라서 0.5를 기준으로 0 또는 1로 바꾸어줌
+> - y와 y_hat이 잘 맞는지 교차해서 비교한 것이 Confusion Matrix
+
+
+
+#### 이진 혼돈 행렬(Binary Confusion Matrix)
+
+- 이진분류는 알고싶은 것을 0(Positive)로, 상관없는 것을 1(Negative)로 둔다
+
+|               |             | y_hat<br />(예측)     |                       |
+| ------------- | ----------- | --------------------- | --------------------- |
+|               | 비교        | 0(Positive)           | 1(Negative)           |
+| y<br />(실제) | 0(Positive) | O(True Positive, TP)  | X(False Negative, FN) |
+|               | 1(Negative) | X(False Positive, FP) | O(True Negative, TN)  |
+
+- 제대로 예측했는지 교차행렬표로 표현
+- False Negative: 잘못된 Negative (True인데 Negative로 표시함)
+- False Positive: 잘못된 Positive (False인데 Positive로 표시함) 
+
+
+
+#### Accuracy(정확도)
+
+- (문제) 신용카드 데이터
+
+- Positive(상환)와 Negative(연체)로 맞게 분류된 데이터의 비율
+- (TP + TN) / (TP + TN + FP + FN) = 2921명 / 3000명 = 97%
+- 정확도가 높은가?  YES
+- 좋은 모델인가? 모른
+- 정확도를 가지고 좋은 모델인지 아닌지를 알 수는 없다
+
+
+
+#### Precision(정밀도)
+
+- Positive(상환)로 분류된 결과 중 실제 Positive(상환)의 비율
+- Spam메일이 알고싶은 것이므로 Positive(0), Ham메일이  Negative(1)
+- Negative(=Ham mail)를 Positive(=Spam mail)로 틀리게 분류 시 문제 발생: 스팸메일 필터링
+  - Spam -> Spam(o)
+  - Ham -> Ham(o)
+  - Spam -> Ham(x): 그냥 불편한 것
+  - Ham -> Spam(x): 비즈니스 임팩트가 커짐
+- 이 경우 Precision가 높은 모델을 만들어야 한다
+
+
+
+#### Recall(재현율)
+
+- 실제 Positive(상환) 중에 Positive(상환)로 분류된 비율
+- Positive를 Negative로 틀리게 분류 시 문제 발생: 코로나 진단
+- 양성환자를 알고 싶은 것이므로 양성(Positive), 음성(Negative)
+  - 코로나 걸렸는데 -> 코로나에 걸리지 않았다고 함: 비즈니스 임팩트가 더 큼
+  - 코로나에 안걸렸는데 -> 걸렸다고 함
+- 이 경우 Recall이 높은 모델을 만들어야 한다
+- = 민감도(Sensitivity), 적중률, 진짜양성비율
+
+
+
+- Business Impact
+  - Negative impact를 의미
+  - 어떤 일에 부정적 영향
+
+
+
+
+
+(문제) 신용카드 회사에서는 상환보다 연체하는 사람이 더 알고싶음
+
+- 연체가 Positive, 상환이 Negative
+- Precision, Recall 중 중요한 것? (이진분류에서는 정확도보다 둘이 더 중요한 경우가 많다)
+- 문제점: 상환자가 연체자보다 압도적으로 많다
+- 모델의 성능에 상관없이, 비즈니스 특성 상 "전부 다 상환합니다" 라고 해도 라고 해도 정확도 97%
+- 비즈니스적인 관점에서 정확도가 별 의미가 없게 된다
+- 데이터가 한쪽으로 쏠려있는  경우는 좋지 않다
+
+
+
+#### Positive(연체) 기준
+
+- 정확도: 2921/3000 = 97% 바뀌지 않는다
+- 정밀도: 32 / 39 = 82%
+- 재현율: 32 / 104 = 31%
+
+
+
+- 연체(Positive)인데 -> 상환(Negative)할 거라고 예측: 비즈니스 임팩트가 더 큼
+- 상환(Negative)인데 -> 연체(Positive)할 거라고 예측
+
+- 재현율이 더 중요
+
+
+
+- 정확도, 정밀도, 재현율 자체가 중요한 게 아니라, 좋은 모델을 만들기 위해서는 비즈니스에 대한 이해가 있어야 한다
+- 분류모델 측정에는 많은 고민이 필요하다
+
+
+
+
+
+---
+
+#### 정리
+
+- y와 y_hat의 맞음과 틀림 정도를 계산하는 것
+
+- 정확도 외 precision, recall 등으로도 계산할 수 있다
+
+- Binary Confusion Matrix를 만들고, 내가 더 알고 싶은 것을 Positive로 두어야 한다
+
+  (이진분류의 경우 내가 알고싶은 것이 존재하는 경우가 많다)
+
+- 정확도: Positive를 Positive로, Negative를 Negative로
+
+- 정밀도: Positive 분류된 것 중 진짜 Positive 비율
+
+- 재현율: 진짜 Positive중 Positive로 분류된 비율
+
+---
+
+
+
+- 어떤 경우는 positive, negative 상관없이 모두 잘 맞추는 게 중요할 수도 있다
+- 데이터의 비율이 비슷할 경우 정확도, 아니라면 F1-Score 사용 가능 
+
+
+
+#### Evaluation Method: F1-Score(0에서 1 사이 값)
+
+- 정밀도와 재현율은 **Trade-off관계** (둘다 높일 수는 없다): 통계학의 1종 오류와 2종 오류의 관계
+- F1-Score: 정밀도와 재현율의 조화평균
+  - 조화평균: 정밀도와 재현율 같은 비율에 대한 평균을 구하기 위해서는 조화평균 사용
+  - 일반적으로 사용하는 평균은 산술평균
+
+- F1-Score = 2 / 1/Precision + 1/Recall = 2 * ((Precision * recall) / (Precision + Recall))
+
+
+
+p.357
+
+에러의 종류
+
+잘못 분류한 샘플의 수가 원하는 정보의 전부느 아니므로, 정확도만으로 예측 성능을 측정하기에는 부족할 때가 종종 있음.
+
+
+
+
+
+#### (참고) ROC, AUC: 이진분류에만 사용되는 비율계산 (p.376)
+
+
+
+
+
+
+
+---
+
+#### Logistic Regression 정리
+
+- 데이터를 숫자로(0 or 1) 인코딩하여 처리
+- Regression Analysis는 y_hat의 범위가 -무한대~무한대
+- 분류 문제에서는 y는 sigmoid 활성화함수를 쓰므로, y_hat = sigmoid(xw+b) 으로 0~1 사이 값만 나오게 된다
+- sigmoid는 확률의 "logit"이라는 개념에서 온 것으로, logistic = sigmoid 라고 생각해도 무방하다
+- 우리가 필요한 것은 0 or 1 이므로, 분류기준을 0.5로 하여 1, 0으로 처리하게 된다 (sklearn predict에 자동으로 처리)
+- sigmoid 안의 b, w 값을 튜닝하여 위치와 기울기를 조정하여 학습
+- 경사하강할 때 쓰는 오차함수가 CEE
+  - CEE = -y*log(y_hat)  - (1-y)\*log(1-y_hat)
+- 두가지 다른 확률을 사용하므로 cross entropy
+- 학습을 평가할 때는 accuracy, precision, recall
+- 비즈니스에 어떤 영향을 주는게 더 심각한 것인지(비즈니스 임팩트)를 파악하는 것이 중요
+- 그에 따라 precision, recall을 선택해야 함 (이진분류에서 정확도를 쓰는 경우는 많지 않다)
+- recall에 대한 문제를 푸는 경우가 더 많긴 하나, 비즈니스에 따라 다르다
+- Confusion Matrix를 제대로 그리는 것이 중요하다
+- Precision과 Recall을 함께 측정하고 싶다면 F1 Score(조화평균)을 사용한다
+- 모델을 생성할 때는 sklearn의 LogisticRegression을 사용한다
+  - 여러 파라미터가 있으나, 전체적인 모델을 본 이후 나중에 한번에 정리할 예정
+
+---
 
