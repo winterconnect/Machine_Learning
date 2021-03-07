@@ -2834,3 +2834,14 @@ Data Scientist
 ### XGBoost
 
 ### LightGBM
+
+
+
+
+
+랜덤포레스트에서 교차검증 확인하기
+
+cross validation score
+
+
+
