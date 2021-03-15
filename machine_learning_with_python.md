@@ -1897,7 +1897,7 @@ Logistic과 Sigmoid는 같은 의미로 쓰인다
 
 
 
-#### Recall(재현율)
+#### Recall(재현율) = Sensitivity
 
 - 실제 Positive(상환) 중에 Positive(상환)로 분류된 비율
 - Positive를 Negative로 틀리게 분류 시 문제 발생: 코로나 진단
